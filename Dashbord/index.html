@@ -24,12 +24,12 @@
       <div class="alagchezen">
         <a class="nav-link active" href="#">Home</a>
         <a class="nav-link active" href="../Profile/index.html">My Profile</a>
-        <a class="nav-link dropdown-toggle" onclick="navbarScrollingDropdown()">
+        <a class="nav-link dropdown-toggle navbarScrollingDropdowntag">
           <i class="fa-solid fa-caret-down"></i>
-          <img style="z-index: 13;" src="../assests/avatar.png" onclick="openmodalofpostimgfoo()" class="avatarDummy loginuserpostimage" alt="">
+          <img style="z-index: 13;" src="../assests/avatar.png" class="avatarDummy loginuserpostimage openmodalofpostimgbtn" alt="">
           
           <div class="dropdownkeclickperanewalelist">
-              <a class="dropdown-item none" onclick="logout()">Logout</a>
+              <a class="dropdown-item none logoutbtn">Logout</a>
               <a class="dropdown-item none">ABOUT</a>
               <a class="dropdown-item none">SHORTS</a>
               <a class="dropdown-item none">NEWS</a>
@@ -221,8 +221,7 @@
 
   </div>
   </div>
-  <script src="app.js"></script>
-
+  <script type="module" src="app.js"></script>
 </body>
 
 </html>

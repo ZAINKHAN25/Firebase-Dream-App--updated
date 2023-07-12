@@ -1,19 +1,27 @@
+import { auth , onAuthStateChanged , signOut } from "../firebasconfig.js";
+
 var body = document.querySelector('body')
 var modalbody = document.querySelector('.modalbody')
 var modaltwoboy = document.querySelector('.modaltwoboy')
 
 let isLoggedInUser = JSON.parse(localStorage.getItem("lOGINUSER")) || [];
-console.log("", isLoggedInUser);
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (isLoggedInUser) {
-    displayUserInfo(isLoggedInUser);
-    let posts = JSON.parse(localStorage.getItem("posts")) || [];
-    displayPosts(posts);
-  } else {
-    console.log(isLoggedInUser)
-    window.location.href = "../index.html";
-  }
+    if (isLoggedInUser) {
+      console.log(isLoggedInUser)
+
+      displayUserInfo(isLoggedInUser);
+
+      let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+      displayPosts(posts);
+
+
+      const uid = user.uid;
+    } else {
+      window.location.href = "../index.html";
+      console.log(isLoggedInUser)
+    }
 });
 
 document.getElementById('nikalnahhai').addEventListener('click', function() {
@@ -90,10 +98,23 @@ div.innerHTML = `
   }
 }
 
+var logoutbtn = document.querySelector('.logoutbtn')
+logoutbtn.addEventListener("click", logout)
+
 function logout() {
-  localStorage.removeItem("LOGINUSER");
+  signOut(auth).then(() => {
+    localStorage.removeItem("LOGINUSER");
   window.location.href = "../index.html";
+  }).catch((error) => {
+    console.log(error)
+  });
+  
+  
 }
+
+var navbarScrollingDropdowntag = document.querySelector('.navbarScrollingDropdowntag')
+
+navbarScrollingDropdowntag.addEventListener('click', navbarScrollingDropdown)
 
 function navbarScrollingDropdown(){
     var dropdownItems = document.querySelectorAll('.dropdown-item');
@@ -113,6 +134,9 @@ function removemodalfoo(){
   body.classList.remove('overflowhidden')
 }
 
+var openmodalofpostimgbtn = document.querySelector('.openmodalofpostimgbtn')
+openmodalofpostimgbtn.addEventListener('click', openmodalfoo)
+
 function openmodalfoo() {
   var modalbody = document.querySelector('.modalbody');
   var userName = document.querySelector('.infonamemodal h2');
@@ -126,7 +150,6 @@ function openmodalfoo() {
 }
 function opensecondmodalfoo(){
   var modaltwoboy = document.querySelector('.modaltwoboy')
-  var twomodal = document.querySelector('.twomodal');
 
   body.classList.add('overflowhidden')
   modaltwoboy.classList.remove('none');
@@ -134,7 +157,6 @@ function opensecondmodalfoo(){
 
 function removemodaltwofoo(){
   var modaltwoboy = document.querySelector('.modaltwoboy')
-  var twomodal = document.querySelector('.twomodal');
   
   body.classList.remove('overflowhidden')
   modaltwoboy.classList.add('none');
@@ -178,7 +200,6 @@ function updateLoginProfile(event) {
 
 function closeModalTwoFoo() {
   var modaltwoboy = document.querySelector('.modaltwoboy')
-  var twomodal = document.querySelector('.twomodal');
   
   body.classList.remove('overflowhidden')
   modaltwoboy.classList.add('none');
