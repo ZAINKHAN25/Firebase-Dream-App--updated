@@ -37,6 +37,9 @@ function displayUserInfo(user) {
   document.getElementById("description").textContent = user.description || "No Description Added";
 }
 
+var no2pagalhaiyebutton = document.querySelector('.no2pagalhaiyebutton')
+no2pagalhaiyebutton.addEventListener('click', postHandler)
+
 function postHandler() {
   const nikalnahhai = document.querySelector('#nikalnahhai')
   const postInput = document.getElementById("postInputBox");
@@ -129,6 +132,9 @@ function navbarScrollingDropdown(){
 })
 }
 
+var no1pagalhaiyebutton = document.querySelector('.no1pagalhaiyebutton')
+no1pagalhaiyebutton.addEventListener('click', removemodalfoo )
+
 function removemodalfoo(){
   modalbody.classList.add('none')
   body.classList.remove('overflowhidden')
@@ -148,6 +154,10 @@ function openmodalfoo() {
   body.classList.add('overflowhidden')
   modalbody.classList.remove('none');
 }
+
+var oipensecondmodalbtn = document.querySelector(".oipensecondmodalbtn")
+oipensecondmodalbtn.addEventListener('click', opensecondmodalfoo)
+
 function opensecondmodalfoo(){
   var modaltwoboy = document.querySelector('.modaltwoboy')
 
@@ -197,6 +207,9 @@ function updateLoginProfile(event) {
   reader.readAsDataURL(file);
 
 }
+
+var closeModalTwoBtn = document.querySelector('.closeModalTwoBtn')
+closeModalTwoBtn.addEventListener('click', closeModalTwoFoo)
 
 function closeModalTwoFoo() {
   var modaltwoboy = document.querySelector('.modaltwoboy')

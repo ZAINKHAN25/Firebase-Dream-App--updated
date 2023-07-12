@@ -26,7 +26,7 @@
         <a class="nav-link active" href="../Profile/index.html">My Profile</a>
         <a class="nav-link dropdown-toggle navbarScrollingDropdowntag">
           <i class="fa-solid fa-caret-down"></i>
-          <img style="z-index: 13;" src="../assests/avatar.png" class="avatarDummy loginuserpostimage openmodalofpostimgbtn" alt="">
+          <img style="z-index: 13;" src="../assests/avatar.png" class="avatarDummy loginuserpostimage" alt="">
           
           <div class="dropdownkeclickperanewalelist">
               <a class="dropdown-item none logoutbtn">Logout</a>
@@ -43,7 +43,7 @@
     <div class="modaltwoboy none">
       <div class="twomodal">
         <input id="profileImageInput" onchange="updateLoginProfile(event)" type="file">
-        <input style="background: rgb(0, 242, 255); color: white;width: 40%; border-radius: 8px; border: none; height: 30px;" type="button" onclick="closeModalTwoFoo()" value="Close">
+        <input class="closeModalTwoBtn" style="background: rgb(0, 242, 255); color: white;width: 40%; border-radius: 8px; border: none; height: 30px;" type="button" value="Close">
       </div>
     </div>
     <!-- ... -->
@@ -74,8 +74,8 @@
           </form>
         </div>
 
-        <input class="no1pagalhaiyebutton" type="button" onclick="removemodalfoo()" value="Close">
-        <input class="no2pagalhaiyebutton" type="button" value="Post" onclick="postHandler()">
+        <input class="no1pagalhaiyebutton" type="button" value="Close">
+        <input class="no2pagalhaiyebutton" type="button" value="Post">
 
       </div>
 
@@ -87,7 +87,7 @@
 
         <div class="boxStylekabhai">
           <center>
-            <img onclick="opensecondmodalfoo()" id="profilePicture" src="../assests/avatar.png" class="profilePictureuppperwala loginuserpostimage" alt="">
+            <img id="profilePicture" src="../assests/avatar.png" class="profilePictureuppperwala oipensecondmodalbtn loginuserpostimage" alt="">
 
             <h5 id="userName" style="margin-top: 60px; font-size: xx-large;">User Name</h5>
             <h5 id="emailAddress" class="aikhiclass">User Email</h5>
@@ -117,8 +117,8 @@
         <div class="postInputArea">
           <div class="firstlineofpostinputar">
             <img src="../assests/avatar.png" class="profilePicture loginuserpostimage" alt="">
-            <input onclick="openmodalfoo()" placeholder="Create a new post" id="nikalnahhai" type="text"
-              class="postInput">
+            <input placeholder="Create a new post" id="nikalnahhai" type="text"
+              class="postInput openmodalofpostimgbtn">
           </div>
           <div class="secondlineofpostinputar">
             <span><i class="fa-solid gapfromside fa-image"></i>PHOTOS</span>
