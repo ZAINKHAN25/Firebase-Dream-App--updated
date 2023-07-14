@@ -5,6 +5,7 @@ var modalbody = document.querySelector('.modalbody')
 var modaltwoboy = document.querySelector('.modaltwoboy')
 
 let isLoggedInUser = JSON.parse(localStorage.getItem("lOGINUSER")) || [];
+console.log(JSON.parse(localStorage.getItem("lOGINUSER")))
 
 document.addEventListener("DOMContentLoaded", function () {
     if (isLoggedInUser) {
@@ -17,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
       displayPosts(posts);
 
 
-      const uid = user.uid;
     } else {
       window.location.href = "../index.html";
       console.log(isLoggedInUser)
@@ -53,7 +53,7 @@ function postHandler() {
       content: postContent,
       email: isLoggedInUser.mobilenumsignup,
       userNameu: isLoggedInUser.iFirstName + " " + isLoggedInUser.iSurnameName,
-      description: isLoggedInUser.description,
+      description: isLoggedInUser.description  || "No description Added",
       date: new Date().getDate(),
       imgsource: isLoggedInUser.profilePicture || "../assests/avatar.png" // Set the profile picture source or default avatar image
     };
@@ -216,4 +216,18 @@ function closeModalTwoFoo() {
   
   body.classList.remove('overflowhidden')
   modaltwoboy.classList.add('none');
+}
+
+
+function thecurrentuserisloggedin(){
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+  
 }

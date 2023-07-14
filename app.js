@@ -1,4 +1,4 @@
-import { db, collection, addDoc, auth , createUserWithEmailAndPassword, signInWithEmailAndPassword} from './firebasconfig.js';
+import { db,doc, setDoc, collection, addDoc, auth , createUserWithEmailAndPassword, signInWithEmailAndPassword} from './firebasconfig.js';
 
 
 var body = document.querySelector("body");
@@ -142,7 +142,7 @@ signupbtn.addEventListener('click', () => {
 
     
     gettingsignupemail();
-    gettinguserdataintofirebase();
+    
 
     users.push(user);
     localStorage.setItem('users', JSON.stringify(users));
@@ -153,36 +153,29 @@ signupbtn.addEventListener('click', () => {
 });
 
 loginbtn.addEventListener('click', login)
+
 function login(){
     signInWithEmailAndPassword(auth, emailforlogin.value, passwordforlogin.value)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
+    console.log(user);
+    localStorage.setItem('lOGINUSER', JSON.stringify(user));
+
+    location.href = "./Dashbord/index.html";
     // ...
   })
   .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+    console.log("nahi chala")
+
   });
-
-    users.filter(function(element) {
-    if (element.mobilenumsignup == emailforlogin.value && element.newpasswordsignup == passwordforlogin.value) {
-        console.log("Chal gya");
-        localStorage.setItem('lOGINUSER', JSON.stringify(element));
-        location.href = "./Dashbord/index.html";
-    }
-    else{
-        console.log("nahi chala")
-    }
-});
-
 }
 
 
 
-async function gettinguserdataintofirebase(){
+async function gettinguserdataintofirebase(uniqueid){
     try {
-        const docRef = await addDoc(collection(db, "users"), {
+        await setDoc(doc(db, "user", uniqueid), {
             iFirstName: iFirstName.value,
             iSurnameName: iSurnameName.value,
             newpasswordsignup: newpasswordsignup.value,
@@ -192,7 +185,8 @@ async function gettinguserdataintofirebase(){
             dateofbirthyearvalue: dateofbirthyearvalue,
             gender: gender
         });
-        console.log("Document written with ID: ", docRef.id);
+
+        
       } catch (e) {
         console.error("Error adding document: ", e);
       }
@@ -202,8 +196,9 @@ async function gettinguserdataintofirebase(){
 async function gettingsignupemail(){
     createUserWithEmailAndPassword(auth, mobilenumsignup.value, newpasswordsignup.value)
     .then((userCredential) => {
-    // Signed in 
+
     const user = userCredential.user;
+    gettinguserdataintofirebase(user.uid)
     // ...
      })
     .catch((error) => {
