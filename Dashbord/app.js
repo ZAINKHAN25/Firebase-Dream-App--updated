@@ -1,27 +1,27 @@
-import { auth , onAuthStateChanged , signOut } from "../firebasconfig.js";
+import {  db , auth , onAuthStateChanged , signOut , doc , getDoc } from "../firebasconfig.js";
 
 var body = document.querySelector('body')
 var modalbody = document.querySelector('.modalbody')
 var modaltwoboy = document.querySelector('.modaltwoboy')
 
-let isLoggedInUser = JSON.parse(localStorage.getItem("lOGINUSER")) || [];
-console.log(JSON.parse(localStorage.getItem("lOGINUSER")))
+
+thecurrentuserisloggedin()
+// console.log(JSON.parse(localStorage.getItem("lOGINUSER")))
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (isLoggedInUser) {
-      console.log(isLoggedInUser)
-
-      displayUserInfo(isLoggedInUser);
-
-      let posts = JSON.parse(localStorage.getItem("posts")) || [];
-
-      displayPosts(posts);
+    // if (isLoggedInUser) {
+    //   // console.log(isLoggedInUser)
 
 
-    } else {
-      window.location.href = "../index.html";
-      console.log(isLoggedInUser)
-    }
+    //   let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+    //   displayPosts(posts);
+
+
+    // } else {
+    //   window.location.href = "../index.html";
+    //   console.log(isLoggedInUser)
+    // }
 });
 
 document.getElementById('nikalnahhai').addEventListener('click', function() {
@@ -29,12 +29,25 @@ document.getElementById('nikalnahhai').addEventListener('click', function() {
   postInputBox.focus();
 });
 
-function displayUserInfo(user) {
-  document.getElementById("userName").textContent = user.iFirstName + ' ' + user.iSurnameName;
-  document.getElementById("emailAddress").textContent = user.email;
-  document.getElementById("mobNum").textContent = user.mobilenumsignup;
-  document.getElementById("gender").textContent = user.gender;
-  document.getElementById("description").textContent = user.description || "No Description Added";
+async function displayUserInfo(user) {
+  const docRef = doc(db, "user", user);
+  const docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+  var {iFirstName,iSurnameName, email, mobilenumsignup, gender, description} = docSnap.data();
+
+  console.log(iFirstName);
+  console.log("Document data:", docSnap.data());
+  document.getElementById("userName").textContent = iFirstName + ' ' + iSurnameName;
+  document.getElementById("emailAddress").textContent = email;
+  document.getElementById("mobNum").textContent = mobilenumsignup;
+  document.getElementById("gender").textContent = gender;
+  document.getElementById("description").textContent = description || "No Description Added";
+} else {
+  // docSnap.data() will be undefined in this case
+  console.log("No such document!");
+}
+  console.log(user);
 }
 
 var no2pagalhaiyebutton = document.querySelector('.no2pagalhaiyebutton')
@@ -223,10 +236,10 @@ function thecurrentuserisloggedin(){
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
+      displayUserInfo(uid)
       
     } else {
-      // User is signed out
-      // ...
+      location.href = '../index.html'
     }
   });
   
