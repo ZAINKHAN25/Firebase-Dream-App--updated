@@ -1,25 +1,23 @@
 import { db, auth, onAuthStateChanged, signOut, doc, getDoc } from "../firebasconfig.js";
 
-var body = document.querySelector('body')
-var modalbody = document.querySelector('.modalbody')
-var modaltwoboy = document.querySelector('.modaltwoboy')
-
-
+var body = document.querySelector('body');
+var modalbody = document.querySelector('.modalbody');
+var modaltwoboy = document.querySelector('.modaltwoboy');
+var isLoggedInUser = null; // Define a variable to store the logged-in user information
 
 const thecurrentuserisloggedin = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
       displayUserInfo(uid);
-
+      isLoggedInUser = user; // Store the logged-in user information
     } else {
-      location.href = '../index.html'
+      location.href = '../index.html';
     }
   });
-  
 };
 
-thecurrentuserisloggedin()
+thecurrentuserisloggedin();
 
 document.getElementById('nikalnahhai').addEventListener('click', function () {
   var postInputBox = document.getElementById('postInputBox');
@@ -27,33 +25,27 @@ document.getElementById('nikalnahhai').addEventListener('click', function () {
 });
 
 async function displayUserInfo(user) {
-
-
   const docRef = doc(db, "user", user);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
     var { iFirstName, iSurnameName, email, mobilenumsignup, gender, description } = docSnap.data();
 
-    console.log(iFirstName);
-    console.log("Document data:", docSnap.data());
     document.getElementById("userName").textContent = iFirstName + ' ' + iSurnameName;
     document.getElementById("emailAddress").textContent = email;
     document.getElementById("mobNum").textContent = mobilenumsignup;
     document.getElementById("gender").textContent = gender;
     document.getElementById("description").textContent = description || "No Description Added";
   } else {
-    // docSnap.data() will be undefined in this case
     console.log("No such document!");
   }
-  console.log(user);
 }
 
-var no2pagalhaiyebutton = document.querySelector('.no2pagalhaiyebutton')
-no2pagalhaiyebutton.addEventListener('click', postHandler)
+var no2pagalhaiyebutton = document.querySelector('.no2pagalhaiyebutton');
+no2pagalhaiyebutton.addEventListener('click', postHandler);
 
 function postHandler() {
-  const nikalnahhai = document.querySelector('#nikalnahhai')
+  const nikalnahhai = document.querySelector('#nikalnahhai');
   const postInput = document.getElementById("postInputBox");
   const postContent = postInput.value;
 
@@ -67,9 +59,8 @@ function postHandler() {
       userNameu: isLoggedInUser.iFirstName + " " + isLoggedInUser.iSurnameName,
       description: isLoggedInUser.description || "No description Added",
       date: new Date().getDate(),
-      imgsource: isLoggedInUser.profilePicture || "../assests/avatar.png" // Set the profile picture source or default avatar image
+      imgsource: isLoggedInUser.profilePicture || "../assets/avatar.png" // Set the profile picture source or default avatar image
     };
-
 
     let posts = JSON.parse(localStorage.getItem("posts")) || [];
     posts.push(post);
@@ -78,8 +69,8 @@ function postHandler() {
     displayPosts(posts);
 
     postInput.value = "";
-    body.classList.remove('overflowhidden')
-    modalbody.classList.add('none')
+    body.classList.remove('overflowhidden');
+    modalbody.classList.add('none');
   }
 }
 
@@ -91,45 +82,45 @@ function displayPosts(posts) {
     const div = document.createElement("div");
     div.className = "post";
     div.innerHTML = `
-  <div class="firstdivofpost">
-    <div class="imgarea">
-      <img src="${post.imgsource}" class="postimg loginuserpostimage" alt="">
-    </div>
-    <div class="colomnwalakam">
-      <div class="span1offirslline">${post.userNameu}</div>
-      <div class="span2offirslline">${post.description}</div>
-      <div class="span3offirslline">${post.date} hours ago</div>
-    </div>
-  </div>
-  <div class="seconddivofpost">${post.content}</div>
-  <div class="thirddivofpost">
-    <span><i class="fa-regular gapfromside fa-heart"></i>PHOTOS</span>
-    <span><i class="fa-solid fa-share-from-square"></i>SHARE</span>
-    <span><i class="fa-regular gapfromside fa-comment-dots"></i>COMMENT</span>
-  </div>
-`;
-    console.log(post)
+      <div class="firstdivofpost">
+        <div class="imgarea">
+          <img src="${post.imgsource}" class="postimg loginuserpostimage" alt="">
+        </div>
+        <div class="colomnwalakam">
+          <div class="span1offirslline">${post.userNameu}</div>
+          <div class="span2offirslline">${post.description}</div>
+          <div class="span3offirslline">${post.date} hours ago</div>
+        </div>
+      </div>
+      <div class="seconddivofpost">${post.content}</div>
+      <div class="thirddivofpost">
+        <span><i class="fa-regular gapfromside fa-heart"></i>PHOTOS</span>
+        <span><i class="fa-solid fa-share-from-square"></i>SHARE</span>
+        <span><i class="fa-regular gapfromside fa-comment-dots"></i>COMMENT</span>
+      </div>
+    `;
+    console.log(post);
     postArea.prepend(div);
   }
 }
 
-var logoutbtn = document.querySelector('.logoutbtn')
-logoutbtn.addEventListener("click", logout)
+var logoutbtn = document.querySelector('.logoutbtn');
+logoutbtn.addEventListener("click", logout);
 
 function logout() {
-  signOut(auth).then(() => {
-    localStorage.removeItem("LOGINUSER");
-    window.location.href = "../index.html";
-  }).catch((error) => {
-    console.log(error)
-  });
-
-
+  signOut(auth)
+    .then(() => {
+      localStorage.removeItem("LOGINUSER");
+      window.location.href = "../index.html";
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
-var navbarScrollingDropdowntag = document.querySelector('.navbarScrollingDropdowntag')
+var navbarScrollingDropdowntag = document.querySelector('.navbarScrollingDropdowntag');
 
-navbarScrollingDropdowntag.addEventListener('click', navbarScrollingDropdown)
+navbarScrollingDropdowntag.addEventListener('click', navbarScrollingDropdown);
 
 function navbarScrollingDropdown() {
   var dropdownItems = document.querySelectorAll('.dropdown-item');
@@ -141,59 +132,69 @@ function navbarScrollingDropdown() {
 
   dropdownkeclickperanewalelist.forEach(function (item) {
     item.classList.toggle('removeborderandbackground');
-  })
+  });
 }
 
-var no1pagalhaiyebutton = document.querySelector('.no1pagalhaiyebutton')
-no1pagalhaiyebutton.addEventListener('click', removemodalfoo)
+var no1pagalhaiyebutton = document.querySelector('.no1pagalhaiyebutton');
+no1pagalhaiyebutton.addEventListener('click', removemodalfoo);
 
 function removemodalfoo() {
-  modalbody.classList.add('none')
-  body.classList.remove('overflowhidden')
+  modalbody.classList.add('none');
+  body.classList.remove('overflowhidden');
 }
 
-var openmodalofpostimgbtn = document.querySelector('.openmodalofpostimgbtn')
-openmodalofpostimgbtn.addEventListener('click', openmodalfoo)
+var openmodalofpostimgbtn = document.querySelector('.openmodalofpostimgbtn');
+openmodalofpostimgbtn.addEventListener('click', openmodalfoo);
 
-function openmodalfoo() {
-  var modalbody = document.querySelector('.modalbody');
-  var userName = document.querySelector('.infonamemodal h2');
-  var userMobNum = document.querySelector('.infonamemodal p');
+async function openmodalfoo() {
+  try {
+    var modalbody = document.querySelector('.modalbody');
+    var userName = document.querySelector('.infonamemodal h2');
+    var userMobNum = document.querySelector('.infonamemodal p');
 
-  // thecurrentuserisloggedin();
-  console.log(thecurrentusertwoisloggedin().iFirstName + ":: ye he wo");
-  // userName.textContent = thecurrentuserisloggedin().iFirstName + " " + thecurrentuserisloggedin().iSurnameName;
-  // userMobNum.textContent = thecurrentuserisloggedin().mobilenumsignup;
-  body.classList.add('overflowhidden')
-  modalbody.classList.remove('none');
+    const docRef = doc(db, "user", await thecurrentusertwoisloggedin());
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const { iFirstName, iSurnameName, mobilenumsignup } = docSnap.data();
+      userName.textContent = iFirstName + " " + iSurnameName;
+      userMobNum.textContent = mobilenumsignup;
+    } else {
+      console.error("Something went wrong");
+    }
+
+    body.classList.add('overflowhidden');
+    modalbody.classList.remove('none');
+  } catch (error) {
+    console.error(error);
+  }
+
 }
 
-var oipensecondmodalbtn = document.querySelector(".oipensecondmodalbtn")
-oipensecondmodalbtn.addEventListener('click', opensecondmodalfoo)
+var oipensecondmodalbtn = document.querySelector(".oipensecondmodalbtn");
+oipensecondmodalbtn.addEventListener('click', opensecondmodalfoo);
 
 function opensecondmodalfoo() {
-  var modaltwoboy = document.querySelector('.modaltwoboy')
+  var modaltwoboy = document.querySelector('.modaltwoboy');
 
-  body.classList.add('overflowhidden')
+  body.classList.add('overflowhidden');
   modaltwoboy.classList.remove('none');
 }
 
 function removemodaltwofoo() {
-  var modaltwoboy = document.querySelector('.modaltwoboy')
+  var modaltwoboy = document.querySelector('.modaltwoboy');
 
-  body.classList.remove('overflowhidden')
+  body.classList.remove('overflowhidden');
   modaltwoboy.classList.add('none');
-
 }
 
 function bgmovewalafoo(id) {
-  var divofid = document.querySelector(`.${id}`)
-  divofid.classList.add('removebgcolor')
+  var divofid = document.querySelector(`.${id}`);
+  divofid.classList.add('removebgcolor');
 }
 
 function autobackgroundfoo(id) {
-  var divofid = document.querySelector(`.${id}`)
-  divofid.classList.remove('removebgcolor')
+  var divofid = document.querySelector(`.${id}`);
+  divofid.classList.remove('removebgcolor');
 }
 
 
@@ -218,37 +219,38 @@ function updateLoginProfile(event) {
   };
 
   reader.readAsDataURL(file);
-
 }
 
-var closeModalTwoBtn = document.querySelector('.closeModalTwoBtn')
-closeModalTwoBtn.addEventListener('click', closeModalTwoFoo)
+var closeModalTwoBtn = document.querySelector('.closeModalTwoBtn');
+closeModalTwoBtn.addEventListener('click', closeModalTwoFoo);
 
 function closeModalTwoFoo() {
-  var modaltwoboy = document.querySelector('.modaltwoboy')
+  var modaltwoboy = document.querySelector('.modaltwoboy');
 
-  body.classList.remove('overflowhidden')
+  body.classList.remove('overflowhidden');
   modaltwoboy.classList.add('none');
 }
 
-
-async function thecurrentusertwoisloggedin(){
-  await onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const uid = user.uid;
-      console.log(uid);
-      const docRef = doc(db, "user", uid);
-      const docSnap = await getDoc(docRef);
-     if (docSnap.exists()) {
-      return docSnap.data();
-    }
-    else{
-      console.log("Something went Wrong");
-    }
-      
-  
-    } else {
-      location.href = '../index.html'
-    }
+async function thecurrentusertwoisloggedin() {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        console.log(uid);
+        resolve(uid);
+      } else {
+        location.href = '../index.html';
+        reject("User not logged in");
+      }
+    });
   });
-} 
+}
+
+(async () => {
+  try {
+    const uid = await thecurrentusertwoisloggedin();
+    console.log(uid + " checking");
+  } catch (error) {
+    console.error(error);
+  }
+})();
