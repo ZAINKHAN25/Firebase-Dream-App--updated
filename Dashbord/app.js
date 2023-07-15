@@ -1,4 +1,4 @@
-import { db, auth, onAuthStateChanged, signOut, doc, getDoc } from "../firebasconfig.js";
+import { db, auth, collection, addDoc, onAuthStateChanged, signOut, doc, getDoc ,getDocs } from "../firebasconfig.js";
 
 var body = document.querySelector('body');
 var modalbody = document.querySelector('.modalbody');
@@ -37,14 +37,14 @@ async function displayUserInfo(user) {
     document.getElementById("gender").textContent = gender;
     document.getElementById("description").textContent = description || "No Description Added";
   } else {
-    console.log("No such document!");
+    console.error("No such document!");
   }
 }
 
 var no2pagalhaiyebutton = document.querySelector('.no2pagalhaiyebutton');
 no2pagalhaiyebutton.addEventListener('click', postHandler);
 
-function postHandler() {
+async function postHandler() {
   const nikalnahhai = document.querySelector('#nikalnahhai');
   const postInput = document.getElementById("postInputBox");
   const postContent = postInput.value;
@@ -52,21 +52,32 @@ function postHandler() {
   nikalnahhai.focuses = postContent.focuses;
 
   if (postContent.trim() !== "") {
-    const post = {
-      id: Date.now(),
-      content: postContent,
-      email: isLoggedInUser.mobilenumsignup,
-      userNameu: isLoggedInUser.iFirstName + " " + isLoggedInUser.iSurnameName,
-      description: isLoggedInUser.description || "No description Added",
-      date: new Date().getDate(),
-      imgsource: isLoggedInUser.profilePicture || "../assets/avatar.png" // Set the profile picture source or default avatar image
-    };
+    
+    const docRef = doc(db, "user", await thecurrentusertwoisloggedin());
+    const docSnap = await getDoc(docRef);
+    const uniqueid = await thecurrentusertwoisloggedin();
+    if (docSnap.exists()) {
+      const { iFirstName, iSurnameName, mobilenumsignup } = docSnap.data();
+      try {
+        const docRef = await addDoc(collection(db, "posts"), {
+          content: postContent,
+          email: mobilenumsignup,
+          userNameu: iFirstName + " " + iSurnameName,
+          description: "No description Added",
+          date: new Date().getTime(),
+          uniqueid: uniqueid
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+      
+    } else {
+      console.error("Something went wrong");
+    }
 
-    let posts = JSON.parse(localStorage.getItem("posts")) || [];
-    posts.push(post);
-    localStorage.setItem("posts", JSON.stringify(posts));
 
-    displayPosts(posts);
+    await displayPosts();
 
     postInput.value = "";
     body.classList.remove('overflowhidden');
@@ -74,35 +85,8 @@ function postHandler() {
   }
 }
 
-function displayPosts(posts) {
-  const postArea = document.getElementById("postAreaId");
-  postArea.innerHTML = "";
 
-  for (let post of posts) {
-    const div = document.createElement("div");
-    div.className = "post";
-    div.innerHTML = `
-      <div class="firstdivofpost">
-        <div class="imgarea">
-          <img src="${post.imgsource}" class="postimg loginuserpostimage" alt="">
-        </div>
-        <div class="colomnwalakam">
-          <div class="span1offirslline">${post.userNameu}</div>
-          <div class="span2offirslline">${post.description}</div>
-          <div class="span3offirslline">${post.date} hours ago</div>
-        </div>
-      </div>
-      <div class="seconddivofpost">${post.content}</div>
-      <div class="thirddivofpost">
-        <span><i class="fa-regular gapfromside fa-heart"></i>PHOTOS</span>
-        <span><i class="fa-solid fa-share-from-square"></i>SHARE</span>
-        <span><i class="fa-regular gapfromside fa-comment-dots"></i>COMMENT</span>
-      </div>
-    `;
-    console.log(post);
-    postArea.prepend(div);
-  }
-}
+
 
 var logoutbtn = document.querySelector('.logoutbtn');
 logoutbtn.addEventListener("click", logout);
@@ -114,7 +98,7 @@ function logout() {
       window.location.href = "../index.html";
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 }
 
@@ -236,7 +220,6 @@ async function thecurrentusertwoisloggedin() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        console.log(uid);
         resolve(uid);
       } else {
         location.href = '../index.html';
@@ -254,3 +237,38 @@ async function thecurrentusertwoisloggedin() {
     console.error(error);
   }
 })();
+
+displayPosts();
+
+async function displayPosts() {
+  const postArea = document.getElementById("postAreaId");
+  postArea.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "posts"));
+
+  querySnapshot.forEach((doc) => {
+    const div = document.createElement("div");
+    div.className = "post";
+    div.innerHTML = `
+      <div class="firstdivofpost">
+        <div class="imgarea">
+          <img src="../assests/avatar.png" class="postimg loginuserpostimage" alt="">
+        </div>
+        <div class="colomnwalakam">
+          <div class="span1offirslline">${doc.data().userNameu}</div>
+          <div class="span2offirslline">${doc.data().email}</div>
+          <div class="span3offirslline">${doc.data().date} in milisecond </div>
+        </div>
+      </div>
+      <div class="seconddivofpost">${doc.data().content}</div>
+      <div class="thirddivofpost">
+        <span><i class="fa-regular gapfromside fa-heart"></i>PHOTOS</span>
+        <span><i class="fa-solid fa-share-from-square"></i>SHARE</span>
+        <span><i class="fa-regular gapfromside fa-comment-dots"></i>COMMENT</span>
+      </div>
+    `;
+    postArea.prepend(div);
+  });
+
+  
+}
