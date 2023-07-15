@@ -171,15 +171,6 @@ function removemodaltwofoo() {
   modaltwoboy.classList.add('none');
 }
 
-function bgmovewalafoo(id) {
-  var divofid = document.querySelector(`.${id}`);
-  divofid.classList.add('removebgcolor');
-}
-
-function autobackgroundfoo(id) {
-  var divofid = document.querySelector(`.${id}`);
-  divofid.classList.remove('removebgcolor');
-}
 
 
 var profilePictureUpperWala = document.querySelector('.profilePictureuppperwala');
@@ -272,3 +263,5 @@ async function displayPosts() {
 
   
 }
+
+
