@@ -1,52 +1,51 @@
-import {  db , auth , onAuthStateChanged , signOut , doc , getDoc } from "../firebasconfig.js";
+import { db, auth, onAuthStateChanged, signOut, doc, getDoc } from "../firebasconfig.js";
 
 var body = document.querySelector('body')
 var modalbody = document.querySelector('.modalbody')
 var modaltwoboy = document.querySelector('.modaltwoboy')
 
 
+
+const thecurrentuserisloggedin = () => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      displayUserInfo(uid);
+
+    } else {
+      location.href = '../index.html'
+    }
+  });
+  
+};
+
 thecurrentuserisloggedin()
-// console.log(JSON.parse(localStorage.getItem("lOGINUSER")))
 
-document.addEventListener("DOMContentLoaded", function () {
-    // if (isLoggedInUser) {
-    //   // console.log(isLoggedInUser)
-
-
-    //   let posts = JSON.parse(localStorage.getItem("posts")) || [];
-
-    //   displayPosts(posts);
-
-
-    // } else {
-    //   window.location.href = "../index.html";
-    //   console.log(isLoggedInUser)
-    // }
-});
-
-document.getElementById('nikalnahhai').addEventListener('click', function() {
+document.getElementById('nikalnahhai').addEventListener('click', function () {
   var postInputBox = document.getElementById('postInputBox');
   postInputBox.focus();
 });
 
 async function displayUserInfo(user) {
+
+
   const docRef = doc(db, "user", user);
   const docSnap = await getDoc(docRef);
 
-if (docSnap.exists()) {
-  var {iFirstName,iSurnameName, email, mobilenumsignup, gender, description} = docSnap.data();
+  if (docSnap.exists()) {
+    var { iFirstName, iSurnameName, email, mobilenumsignup, gender, description } = docSnap.data();
 
-  console.log(iFirstName);
-  console.log("Document data:", docSnap.data());
-  document.getElementById("userName").textContent = iFirstName + ' ' + iSurnameName;
-  document.getElementById("emailAddress").textContent = email;
-  document.getElementById("mobNum").textContent = mobilenumsignup;
-  document.getElementById("gender").textContent = gender;
-  document.getElementById("description").textContent = description || "No Description Added";
-} else {
-  // docSnap.data() will be undefined in this case
-  console.log("No such document!");
-}
+    console.log(iFirstName);
+    console.log("Document data:", docSnap.data());
+    document.getElementById("userName").textContent = iFirstName + ' ' + iSurnameName;
+    document.getElementById("emailAddress").textContent = email;
+    document.getElementById("mobNum").textContent = mobilenumsignup;
+    document.getElementById("gender").textContent = gender;
+    document.getElementById("description").textContent = description || "No Description Added";
+  } else {
+    // docSnap.data() will be undefined in this case
+    console.log("No such document!");
+  }
   console.log(user);
 }
 
@@ -66,18 +65,18 @@ function postHandler() {
       content: postContent,
       email: isLoggedInUser.mobilenumsignup,
       userNameu: isLoggedInUser.iFirstName + " " + isLoggedInUser.iSurnameName,
-      description: isLoggedInUser.description  || "No description Added",
+      description: isLoggedInUser.description || "No description Added",
       date: new Date().getDate(),
       imgsource: isLoggedInUser.profilePicture || "../assests/avatar.png" // Set the profile picture source or default avatar image
     };
-    
+
 
     let posts = JSON.parse(localStorage.getItem("posts")) || [];
     posts.push(post);
     localStorage.setItem("posts", JSON.stringify(posts));
-    
+
     displayPosts(posts);
-    
+
     postInput.value = "";
     body.classList.remove('overflowhidden')
     modalbody.classList.add('none')
@@ -87,11 +86,11 @@ function postHandler() {
 function displayPosts(posts) {
   const postArea = document.getElementById("postAreaId");
   postArea.innerHTML = "";
-  
+
   for (let post of posts) {
     const div = document.createElement("div");
-div.className = "post";
-div.innerHTML = `
+    div.className = "post";
+    div.innerHTML = `
   <div class="firstdivofpost">
     <div class="imgarea">
       <img src="${post.imgsource}" class="postimg loginuserpostimage" alt="">
@@ -120,35 +119,35 @@ logoutbtn.addEventListener("click", logout)
 function logout() {
   signOut(auth).then(() => {
     localStorage.removeItem("LOGINUSER");
-  window.location.href = "../index.html";
+    window.location.href = "../index.html";
   }).catch((error) => {
     console.log(error)
   });
-  
-  
+
+
 }
 
 var navbarScrollingDropdowntag = document.querySelector('.navbarScrollingDropdowntag')
 
 navbarScrollingDropdowntag.addEventListener('click', navbarScrollingDropdown)
 
-function navbarScrollingDropdown(){
-    var dropdownItems = document.querySelectorAll('.dropdown-item');
-    var dropdownkeclickperanewalelist = document.querySelectorAll('.dropdownkeclickperanewalelist');
+function navbarScrollingDropdown() {
+  var dropdownItems = document.querySelectorAll('.dropdown-item');
+  var dropdownkeclickperanewalelist = document.querySelectorAll('.dropdownkeclickperanewalelist');
 
-    dropdownItems.forEach(function (item) {
-        item.classList.toggle("none");
-    });
-    
-    dropdownkeclickperanewalelist.forEach(function (item) {
-        item.classList.toggle('removeborderandbackground');
-})
+  dropdownItems.forEach(function (item) {
+    item.classList.toggle("none");
+  });
+
+  dropdownkeclickperanewalelist.forEach(function (item) {
+    item.classList.toggle('removeborderandbackground');
+  })
 }
 
 var no1pagalhaiyebutton = document.querySelector('.no1pagalhaiyebutton')
-no1pagalhaiyebutton.addEventListener('click', removemodalfoo )
+no1pagalhaiyebutton.addEventListener('click', removemodalfoo)
 
-function removemodalfoo(){
+function removemodalfoo() {
   modalbody.classList.add('none')
   body.classList.remove('overflowhidden')
 }
@@ -161,9 +160,10 @@ function openmodalfoo() {
   var userName = document.querySelector('.infonamemodal h2');
   var userMobNum = document.querySelector('.infonamemodal p');
 
-  // Update the username and mobile number dynamically
-  userName.textContent = isLoggedInUser.iFirstName + " " + isLoggedInUser.iSurnameName;
-  userMobNum.textContent = isLoggedInUser.mobilenumsignup;
+  // thecurrentuserisloggedin();
+  console.log(thecurrentusertwoisloggedin().iFirstName + ":: ye he wo");
+  // userName.textContent = thecurrentuserisloggedin().iFirstName + " " + thecurrentuserisloggedin().iSurnameName;
+  // userMobNum.textContent = thecurrentuserisloggedin().mobilenumsignup;
   body.classList.add('overflowhidden')
   modalbody.classList.remove('none');
 }
@@ -171,27 +171,27 @@ function openmodalfoo() {
 var oipensecondmodalbtn = document.querySelector(".oipensecondmodalbtn")
 oipensecondmodalbtn.addEventListener('click', opensecondmodalfoo)
 
-function opensecondmodalfoo(){
+function opensecondmodalfoo() {
   var modaltwoboy = document.querySelector('.modaltwoboy')
 
   body.classList.add('overflowhidden')
   modaltwoboy.classList.remove('none');
 }
 
-function removemodaltwofoo(){
+function removemodaltwofoo() {
   var modaltwoboy = document.querySelector('.modaltwoboy')
-  
+
   body.classList.remove('overflowhidden')
   modaltwoboy.classList.add('none');
 
 }
 
-function bgmovewalafoo(id){
+function bgmovewalafoo(id) {
   var divofid = document.querySelector(`.${id}`)
   divofid.classList.add('removebgcolor')
 }
 
-function autobackgroundfoo(id){
+function autobackgroundfoo(id) {
   var divofid = document.querySelector(`.${id}`)
   divofid.classList.remove('removebgcolor')
 }
@@ -201,22 +201,22 @@ var profilePictureUpperWala = document.querySelector('.profilePictureuppperwala'
 var modalTwoBoy = document.querySelector('.modaltwoboy');
 var loginPostImages = document.querySelectorAll('.loginuserpostimage');
 
-profilePictureUpperWala.addEventListener('click', function() {
+profilePictureUpperWala.addEventListener('click', function () {
   modalTwoBoy.classList.remove('none');
 });
 
 function updateLoginProfile(event) {
   var file = event.target.files[0];
   var reader = new FileReader();
-  
+
   reader.onload = function (e) {
     var imageSrc = e.target.result;
-    
-    loginPostImages.forEach(function(image) {
+
+    loginPostImages.forEach(function (image) {
       image.src = imageSrc;
     });
   };
-  
+
   reader.readAsDataURL(file);
 
 }
@@ -226,21 +226,29 @@ closeModalTwoBtn.addEventListener('click', closeModalTwoFoo)
 
 function closeModalTwoFoo() {
   var modaltwoboy = document.querySelector('.modaltwoboy')
-  
+
   body.classList.remove('overflowhidden')
   modaltwoboy.classList.add('none');
 }
 
 
-function thecurrentuserisloggedin(){
-  onAuthStateChanged(auth, (user) => {
+async function thecurrentusertwoisloggedin(){
+  await onAuthStateChanged(auth, async (user) => {
     if (user) {
       const uid = user.uid;
-      displayUserInfo(uid)
+      console.log(uid);
+      const docRef = doc(db, "user", uid);
+      const docSnap = await getDoc(docRef);
+     if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    else{
+      console.log("Something went Wrong");
+    }
       
+  
     } else {
       location.href = '../index.html'
     }
   });
-  
-}
+} 
