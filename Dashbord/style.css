@@ -17,6 +17,8 @@ body {
   background-color: #05B6C1;
 }
 
+/* Add the Font Awesome library (if not already added) */
+
 .navbar {
   background-color: #f8f9fa;
   padding: 10px 20px;
@@ -32,10 +34,67 @@ body {
   z-index: 11;
 }
 
+.navbar .navbar-content {
+  display: flex;
+  align-items: center;
+}
+
 .navbar .navbar-brand {
   color: #05B6C1;
   text-decoration: none;
 }
+
+.navbar .searchArea {
+  margin-left: auto;
+}
+
+.navbar .alagchezen {
+  display: flex;
+}
+
+.navbar .alagchezen a {
+  margin-right: 10px;
+}
+
+.navbar .menu-toggle {
+  display: none;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #f8f9fa;
+  padding: 10px;
+  box-shadow: 0px 6px 4px 1px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+}
+
+.navbar .dropdown-menu a {
+  display: block;
+  padding: 5px 0;
+  color: #343a40;
+  text-decoration: none;
+}
+
+/* Hide the dropdown menu initially */
+@media (max-width: 720px) {
+  .navbar .navbar-content,
+  .navbar .alagchezen {
+    display: none;
+  }
+
+  .navbar .menu-toggle {
+    display: flex;
+  }
+
+  .navbar .dropdown-menu {
+    display: block;
+  }
+}
+
+
 
 .searchArea {
   display: flex;
@@ -99,22 +158,12 @@ body {
   border-radius: 5px;
 }
 
-.navbar .dropdownkeclickperanewalelist .dropdown-item {
-  color: #343a40;
-  text-decoration: none;
-  display: block;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.navbar .dropdownkeclickperanewalelist .dropdown-item:hover {
-  background-color: #ccc;
-}
 
 .row {
   display: flex;
   justify-content: space-evenly;
   margin-top: 40px;
+  flex-wrap: wrap;
 }
 
 .boxStyle {
@@ -127,7 +176,7 @@ body {
 
 .boxStylekabhai {
   background-color: #f8f9fa;
-  position: sticky;
+  position: static;
   width: 300px;
   border-radius: 5px;
   margin: 10px 0px;
@@ -135,6 +184,7 @@ body {
   max-height: 300px;
   min-height: 200px;
   top: 140px;
+  z-index: 10;
 }
 
 .profilePicture {
@@ -373,10 +423,11 @@ border-radius: 100%;
   justify-content: space-around;
 }
 .thirdarafirstline{
-  position: sticky;
+  position: static;
   top: 118px;
-width: 288px;
+  width: 288px;
 height: max-content;
+margin-bottom: 5vh;
 background: #FFFFFF;
 box-shadow: 1px 5px 4px rgba(0, 0, 0, 0.25);
 border-radius: 8px;
@@ -389,7 +440,7 @@ padding-bottom: 10px;
 }
 
 .thirdareasecondline{
-  position: sticky;
+  position: static;
   top: 500px;
   width: 288px;
   height: max-content;
@@ -402,6 +453,7 @@ padding-bottom: 10px;
   justify-content: start;
   padding-top: 15px;
   padding-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 .requestdiv{
@@ -438,7 +490,7 @@ padding-bottom: 10px;
 }
 .boxstylekabhaikabhai{
   background-color: #f8f9fa;
-  position: sticky;
+  position: static;
   width: 300px;
   border-radius: 5px;
   padding: 10px;
@@ -514,3 +566,24 @@ padding-bottom: 10px;
 .removeborderandbackground{
   background-color: white !important;
 }
+
+@media (max-width:1088px) {
+  .row{
+    justify-content: left;
+    padding-left: 20px;
+  }
+}
+@media (max-width:820px) {
+  .row{
+    justify-content: center;
+    padding-left: auto;
+    padding-right: auto;
+  }
+}
+
+@media (max-width:290px) {
+  *{
+    font-size: 1.2rem !important;
+  }
+}
+
