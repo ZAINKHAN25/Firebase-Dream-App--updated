@@ -8,6 +8,11 @@ const male = document.querySelector('#male')
 const female = document.querySelector('#female')
 const profilepic = document.querySelector('#profilepic')
 const submit = document.querySelector('#submit');
+const dateofbirthdate = document.querySelector('#dateofbirthdate');
+const dateofbirthmonth = document.querySelector('#dateofbirthmonth');
+const dateofbirthyear = document.querySelector('#dateofbirthyear');
+
+
 let isLoggedInUser;
 
 
@@ -42,10 +47,14 @@ async function displayUserInfo(user) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        var { iFirstName, iSurnameName, email, mobilenumsignup, gender, description } = docSnap.data();
+        var { iFirstName, iSurnameName, dateofbirthdatevalue, dateofbirthyearvalue , dateofbirthmonthvalue, gender: usergender } = docSnap.data();
 
-        firestName.value = iFirstName
-        surName.value = iSurnameName
+        firestName.placeholder = iFirstName
+        surName.placeholder = iSurnameName
+        dateofbirthdate.placeholder = dateofbirthdatevalue + " Date"
+        dateofbirthyear.placeholder = dateofbirthyearvalue + " Year"
+        dateofbirthmonth.value = dateofbirthmonthvalue
+        gender.value = usergender
         console.log(docSnap.data());
 
     } else {
