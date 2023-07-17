@@ -15,6 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
 export {
   app,
@@ -33,5 +34,6 @@ export {
   getDoc,
   getStorage,
   ref,
-  getDownloadURL
+  getDownloadURL,
+  storage
 };
