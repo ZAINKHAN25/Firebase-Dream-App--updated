@@ -3,13 +3,17 @@ function bgmovewalafoo(id) {
     divofid.classList.add('removebgcolor');
   }
   
-  function autobackgroundfoo(id) {
+function autobackgroundfoo(id) {
     var divofid = document.querySelector(`.${id}`);
     divofid.classList.remove('removebgcolor');
-  }
+}
 
-  function toggleNavbar() {
+function toggleNavbar() {
     var dropdown = document.querySelector('.navbar .alagchezen');
     dropdown.style.display = dropdown.style.display === 'none' ? 'flex' : 'none';
-  }
-  
+}
+
+var navbar2 = document.querySelector('.navbar');
+// if(navbar2.scrollWidth >= '440'){
+    console.log(navbar2.scrollWidth);
+// }
