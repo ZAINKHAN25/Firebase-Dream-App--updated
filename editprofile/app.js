@@ -1,10 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-
-import { onAuthStateChanged, auth, doc, db, getDoc } from '../firebasconfig.js';
-
-import { getStorage , ref, getDownloadURL, uploadBytes } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js";
-
-
+import { onAuthStateChanged, auth, db, getDoc } from '../firebasconfig.js';
+import { updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAM60KWvtkG839mU292mJzblIqWalqkkJo",
@@ -33,28 +30,68 @@ const thecurrentuserisloggedin = () => {
     if (user) {
       const uid = user.uid;
       displayUserInfo(uid);
-      isLoggedInUser = user; // Store the logged-in user information
+      isLoggedInUser = user;
     } else {
       location.href = '../index.html';
     }
   });
 };
 
-
 thecurrentuserisloggedin();
-
 
 submit.addEventListener('click', async () => {
   const profilepic = document.querySelector('#profilepic');
   const mountainsRef = ref(storage, `images/${profilepic.files[0].name}`);
 
-  console.log(profilepic.files[0])
+  const uploadTask = uploadBytesResumable(mountainsRef, profilepic.files[0]);
+  console.log(isLoggedInUser.uid);
 
+  uploadTask.on('state_changed',
+    (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case 'paused':
+          console.log('Upload is paused');
+          break;
+        case 'running':
+          console.log('Upload is running');
+          break;
+      }
+    },
+    (error) => {
+      console.error(error);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+        console.log('File available at', downloadURL);
+        const washingtonRef = doc(db, "user", isLoggedInUser.uid);
 
-  // 'file' comes from the Blob or File API
-  uploadBytes(mountainsRef, profilepic.files[0]).then((snapshot) => {
-    console.log('Uploaded a blob or file!');
-  });
+        const docRef = doc(db, 'user', isLoggedInUser.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const iFirstName = firestName.value || data.iFirstName;
+          const iSurnameName = surName.value || data.iSurnameName;
+          const dateofbirthdatevalue = dateofbirthdate.value || data.dateofbirthdatevalue;
+          const dateofbirthyearvalue = dateofbirthyear.value || data.dateofbirthyearvalue;
+          const dateofbirthmonthvalue = dateofbirthmonth.value || data.dateofbirthmonthvalue;
+          const usergenderdateofbirthyear = gender.value || data.usergenderdateofbirthyear;
+
+          await updateDoc(washingtonRef, {
+            iFirstName,
+            iSurnameName,
+            dateofbirthdatevalue,
+            dateofbirthyearvalue,
+            dateofbirthmonthvalue,
+            usergenderdateofbirthyear,
+            profilepic: downloadURL
+          });
+        }
+      });
+    }
+  );
 });
 
 async function displayUserInfo(user) {
@@ -62,16 +99,21 @@ async function displayUserInfo(user) {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    var { iFirstName, iSurnameName, dateofbirthdatevalue, dateofbirthyearvalue, dateofbirthmonthvalue, gender: usergender } =
-      docSnap.data();
+    const data = docSnap.data();
+    const iFirstName = firestName.value || data.iFirstName;
+    const iSurnameName = surName.value || data.iSurnameName;
+    const dateofbirthdatevalue = dateofbirthdate.value || data.dateofbirthdatevalue;
+    const dateofbirthyearvalue = dateofbirthyear.value || data.dateofbirthyearvalue;
+    const dateofbirthmonthvalue = dateofbirthmonth.value || data.dateofbirthmonthvalue;
+    const usergenderdateofbirthyear = gender.value || data.usergenderdateofbirthyear;
 
     firestName.placeholder = iFirstName;
     surName.placeholder = iSurnameName;
     dateofbirthdate.placeholder = dateofbirthdatevalue + ' Date';
     dateofbirthyear.placeholder = dateofbirthyearvalue + ' Year';
     dateofbirthmonth.value = dateofbirthmonthvalue;
-    gender.value = usergender;
-    console.log(docSnap.data());
+    gender.value = usergenderdateofbirthyear;
+    console.log(data);
   } else {
     console.error('No such document!');
   }

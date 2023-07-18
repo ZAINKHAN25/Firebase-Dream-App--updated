@@ -237,6 +237,7 @@ async function displayPosts() {
 
   const querySnapshot = await getDocs(collection(db, "posts"));
 
+
   querySnapshot.forEach((doc) => {
     const div = document.createElement("div");
     div.className = "post";
