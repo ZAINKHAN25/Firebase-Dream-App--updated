@@ -1,4 +1,4 @@
-import { db,doc, setDoc, collection, addDoc, auth , createUserWithEmailAndPassword, signInWithEmailAndPassword} from './firebasconfig.js';
+import { db,doc, setDoc,uploadBytes , collection, addDoc, auth , createUserWithEmailAndPassword, signInWithEmailAndPassword} from './firebasconfig.js';
 
 
 var body = document.querySelector("body");

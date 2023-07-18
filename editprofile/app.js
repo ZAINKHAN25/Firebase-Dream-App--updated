@@ -1,9 +1,26 @@
-import { onAuthStateChanged, auth, doc, db, getDoc, getStorage, ref, getDownloadURL , storage} from '../firebasconfig.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+
+import { onAuthStateChanged, auth, doc, db, getDoc } from '../firebasconfig.js';
+
+import { getStorage , ref, getDownloadURL, uploadBytes } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js";
+
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAM60KWvtkG839mU292mJzblIqWalqkkJo",
+  authDomain: "social-media-app-7593f.firebaseapp.com",
+  projectId: "social-media-app-7593f",
+  storageBucket: "social-media-app-7593f.appspot.com",
+  messagingSenderId: "57654938598",
+  appId: "1:57654938598:web:616b84298b629aa89d2427"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 const firestName = document.querySelector('#firestName');
 const surName = document.querySelector('#surName');
 const gender = document.querySelector('#gender');
-const profilepic = document.querySelector('#profilepic');
 const submit = document.querySelector('#submit');
 const dateofbirthdate = document.querySelector('#dateofbirthdate');
 const dateofbirthmonth = document.querySelector('#dateofbirthmonth');
@@ -23,41 +40,21 @@ const thecurrentuserisloggedin = () => {
   });
 };
 
+
 thecurrentuserisloggedin();
 
-const metadata = {
-  contentType: 'image/jpeg'
-};
 
-submit.addEventListener('click', () => {
-  const storage = getStorage();
-  const starsRef = ref(storage, profilepic.files[0], metadata);
+submit.addEventListener('click', async () => {
+  const profilepic = document.querySelector('#profilepic');
+  const mountainsRef = ref(storage, `images/${profilepic.files[0].name}`);
 
-  // Get the download URL
-  getDownloadURL(starsRef)
-    .then((url) => {
-      // Insert url into an <img> tag to "download"
-    })
-    .catch((error) => {
-      // Handle errors
-      switch (error.code) {
-        case 'storage/object-not-found':
-          // File doesn't exist
-          break;
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-        case 'storage/canceled':
-          // User canceled the upload
-          break;
+  console.log(profilepic.files[0])
 
-        // ...
 
-        case 'storage/unknown':
-          // Unknown error occurred, inspect the server response
-          break;
-      }
-    });
+  // 'file' comes from the Blob or File API
+  uploadBytes(mountainsRef, profilepic.files[0]).then((snapshot) => {
+    console.log('Uploaded a blob or file!');
+  });
 });
 
 async function displayUserInfo(user) {
