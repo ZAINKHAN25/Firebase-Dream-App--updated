@@ -31,6 +31,7 @@ const thecurrentuserisloggedin = () => {
       const uid = user.uid;
       displayUserInfo(uid);
       isLoggedInUser = user;
+      loginuserpersonpicfoo(uid)
     } else {
       location.href = '../index.html';
     }
@@ -88,6 +89,7 @@ submit.addEventListener('click', async () => {
             usergenderdateofbirthyear,
             profilepic: downloadURL
           });
+          location.href = '../Dashbord/index.html'
         }
       });
     }
@@ -116,5 +118,29 @@ async function displayUserInfo(user) {
     console.log(data);
   } else {
     console.error('No such document!');
+  }
+}
+
+
+async function loginuserpersonpicfoo(uniqueid) {
+  var loginpersonpics = document.querySelectorAll('.loginpersonpic');
+
+  const docRef = doc(db, "user", uniqueid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    var userData = docSnap.data();
+    var profilePicSrc = userData.profilepic ? userData.profilepic : "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
+
+    loginpersonpics.forEach((element) => {
+      element.src = profilePicSrc;
+    });
+  } else {
+    // User data doesn't exist or couldn't be retrieved
+    // Set default avatar for all elements with class loginpersonpic
+    var defaultAvatarSrc = "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
+    loginpersonpics.forEach((element) => {
+      element.src = defaultAvatarSrc;
+    });
   }
 }

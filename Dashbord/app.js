@@ -1,21 +1,48 @@
-import { db, auth, collection, addDoc, onAuthStateChanged, signOut, doc, getDoc ,getDocs } from "../firebasconfig.js";
+import { db, auth, collection, addDoc, onAuthStateChanged, signOut, getDoc ,getDocs } from "../firebasconfig.js";
+
+import { doc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 var body = document.querySelector('body');
 var modalbody = document.querySelector('.modalbody');
 var modaltwoboy = document.querySelector('.modaltwoboy');
-var isLoggedInUser = null; // Define a variable to store the logged-in user information
+let isLoggedInUser; // Define a variable to store the logged-in user information
+
 
 const thecurrentuserisloggedin = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
       displayUserInfo(uid);
+      loginuserpersonpicfoo(uid)
       isLoggedInUser = user; // Store the logged-in user information
     } else {
       location.href = '../index.html';
     }
   });
 };
+
+async function loginuserpersonpicfoo(uniqueid) {
+  var loginpersonpics = document.querySelectorAll('.loginpersonpic');
+
+  const docRef = doc(db, "user", uniqueid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    var userData = docSnap.data();
+    var profilePicSrc = userData.profilepic ? userData.profilepic : "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
+
+    loginpersonpics.forEach((element) => {
+      element.src = profilePicSrc;
+    });
+  } else {
+    // User data doesn't exist or couldn't be retrieved
+    // Set default avatar for all elements with class loginpersonpic
+    var defaultAvatarSrc = "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
+    loginpersonpics.forEach((element) => {
+      element.src = defaultAvatarSrc;
+    });
+  }
+}
 
 thecurrentuserisloggedin();
 
@@ -65,7 +92,8 @@ async function postHandler() {
           userNameu: iFirstName + " " + iSurnameName,
           description: "No description Added",
           date: new Date().getTime(),
-          uniqueid: uniqueid
+          uniqueid: uniqueid,
+          profilepic: isLoggedInUser.profilepic || '../assests/avatar.png'
         });
         console.log("Document written with ID: ", docRef.id);
       } catch (e) {
@@ -237,32 +265,42 @@ async function displayPosts() {
 
   const querySnapshot = await getDocs(collection(db, "posts"));
 
+  querySnapshot.forEach(async (data) => {
+    var useruid = data.data().uniqueid;
 
-  querySnapshot.forEach((doc) => {
-    const div = document.createElement("div");
-    div.className = "post";
-    div.innerHTML = `
-      <div class="firstdivofpost">
-        <div class="imgarea">
-          <img src="../assests/avatar.png" class="postimg loginuserpostimage" alt="">
+    const docRef = doc(db, "user", useruid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      var againdata = docSnap.data();
+      console.log(againdata);
+      var div = document.createElement("div");
+      div.className = "post";
+      
+      var profilePicSrc = againdata.profilepic ? againdata.profilepic : "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
+      
+      div.innerHTML = `
+        <div class="firstdivofpost">
+          <div class="imgarea">
+            <img src="${profilePicSrc}" class="postimg loginuserpostimage" alt="">
+          </div>
+          <div class="colomnwalakam">
+            <div class="span1offirslline">${againdata.iFirstName} ${againdata.iSurnameName}</div>
+            <div class="span2offirslline">${data.data().email}</div>
+            <div class="span3offirslline">${data.data().date} in milisecond </div>
+          </div>
         </div>
-        <div class="colomnwalakam">
-          <div class="span1offirslline">${doc.data().userNameu}</div>
-          <div class="span2offirslline">${doc.data().email}</div>
-          <div class="span3offirslline">${doc.data().date} in milisecond </div>
+        <div class="seconddivofpost">${data.data().content}</div>
+        <div class="thirddivofpost">
+          <span><i class="fa-regular gapfromside fa-heart"></i>PHOTOS</span>
+          <span><i class="fa-solid fa-share-from-square"></i>SHARE</span>
+          <span><i class="fa-regular gapfromside fa-comment-dots"></i>COMMENT</span>
         </div>
-      </div>
-      <div class="seconddivofpost">${doc.data().content}</div>
-      <div class="thirddivofpost">
-        <span><i class="fa-regular gapfromside fa-heart"></i>PHOTOS</span>
-        <span><i class="fa-solid fa-share-from-square"></i>SHARE</span>
-        <span><i class="fa-regular gapfromside fa-comment-dots"></i>COMMENT</span>
-      </div>
-    `;
-    postArea.prepend(div);
+      `;
+      postArea.prepend(div);
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
   });
-
-  
 }
-
-

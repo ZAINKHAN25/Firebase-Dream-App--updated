@@ -15,5 +15,4 @@ function toggleNavbar() {
 
 var navbar2 = document.querySelector('.navbar');
 // if(navbar2.scrollWidth >= '440'){
-    console.log(navbar2.scrollWidth);
 // }
