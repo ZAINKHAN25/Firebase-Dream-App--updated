@@ -115,7 +115,6 @@ async function postHandler() {
 
 
 
-
 var logoutbtn = document.querySelector('.logoutbtn');
 logoutbtn.addEventListener("click", logout);
 
@@ -273,9 +272,20 @@ async function displayPosts() {
 
     if (docSnap.exists()) {
       var againdata = docSnap.data();
-      console.log(againdata);
+      console.log(data.data());
       var div = document.createElement("div");
       div.className = "post";
+      let deleteoredittruefalse;
+      console.log(isLoggedInUser);
+       if(data.data().uniqueid == isLoggedInUser.uid){
+        deleteoredittruefalse = `<div class="deleteoreditdiv">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+                <ul class="deleteoreditdropdown">
+                  <li>Edit</li>
+                  <li>Delete</li>
+                </ul>
+              </div>`
+      }
       
       var profilePicSrc = againdata.profilepic ? againdata.profilepic : "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
       
@@ -289,6 +299,7 @@ async function displayPosts() {
             <div class="span2offirslline">${data.data().email}</div>
             <div class="span3offirslline">${data.data().date} in milisecond </div>
           </div>
+          ${deleteoredittruefalse || ""}
         </div>
         <div class="seconddivofpost">${data.data().content}</div>
         <div class="thirddivofpost">
