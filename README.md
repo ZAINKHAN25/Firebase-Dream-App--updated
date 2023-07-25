@@ -11,7 +11,7 @@ Welcome to the Firebase Dream App repository! This repository contains the sourc
 
 ## Live Demo
 
-To see the Firebase Dream App in action, visit the [live demo](https://zainkhan25-firebase-dream-app.netlify.app/) and explore its features.
+To see the Firebase Dream App in action, visit the [live demo]([https://zainkhan25-firebase-dream-app.netlify.app/](https://social-media-app-7593f.web.app/)) and explore its features.
 
 ## Installation
 
