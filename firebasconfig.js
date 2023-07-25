@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, addDoc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getFirestore, collection,deleteDoc ,updateDoc, doc, setDoc, addDoc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 import { getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 import { getStorage, ref , getDownloadURL, uploadBytes  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js";
 
@@ -34,5 +34,7 @@ export {
   ref,
   getDownloadURL,
   uploadBytes ,
-  getStorage
+  getStorage,
+  deleteDoc,
+  updateDoc
 };

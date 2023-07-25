@@ -1,11 +1,14 @@
-import { db, auth, collection, addDoc, onAuthStateChanged, signOut, getDoc ,getDocs } from "../firebasconfig.js";
+import { db, auth, collection, updateDoc, addDoc, onAuthStateChanged, signOut, getDoc, getDocs, deleteDoc } from "../firebasconfig.js";
 
 import { doc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 var body = document.querySelector('body');
 var modalbody = document.querySelector('.modalbody');
 var modaltwoboy = document.querySelector('.modaltwoboy');
-let isLoggedInUser; // Define a variable to store the logged-in user information
+var modalbodyofedit = document.querySelector('.modalbodyofedit')
+var modalofedit = document.querySelector('.modalofedit')
+let uidofedit;
+let isLoggedInUser;
 
 
 const thecurrentuserisloggedin = () => {
@@ -14,7 +17,7 @@ const thecurrentuserisloggedin = () => {
       const uid = user.uid;
       displayUserInfo(uid);
       loginuserpersonpicfoo(uid)
-      isLoggedInUser = user; // Store the logged-in user information
+      isLoggedInUser = user;
     } else {
       location.href = '../index.html';
     }
@@ -79,7 +82,7 @@ async function postHandler() {
   nikalnahhai.focuses = postContent.focuses;
 
   if (postContent.trim() !== "") {
-    
+
     const docRef = doc(db, "user", await thecurrentusertwoisloggedin());
     const docSnap = await getDoc(docRef);
     const uniqueid = await thecurrentusertwoisloggedin();
@@ -95,11 +98,11 @@ async function postHandler() {
           uniqueid: uniqueid,
           profilepic: isLoggedInUser.profilepic || '../assests/avatar.png'
         });
-        console.log("Document written with ID: ", docRef.id);
+        // console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
-      
+
     } else {
       console.error("Something went wrong");
     }
@@ -250,7 +253,7 @@ async function thecurrentusertwoisloggedin() {
 (async () => {
   try {
     const uid = await thecurrentusertwoisloggedin();
-    console.log(uid + " checking");
+    // console.log(uid + " checking");
   } catch (error) {
     console.error(error);
   }
@@ -265,6 +268,7 @@ async function displayPosts() {
   const querySnapshot = await getDocs(collection(db, "posts"));
 
   querySnapshot.forEach(async (data) => {
+    // console.log(data)
     var useruid = data.data().uniqueid;
 
     const docRef = doc(db, "user", useruid);
@@ -272,23 +276,23 @@ async function displayPosts() {
 
     if (docSnap.exists()) {
       var againdata = docSnap.data();
-      console.log(data.data());
+      // console.log(data.data());
       var div = document.createElement("div");
       div.className = "post";
       let deleteoredittruefalse;
-      console.log(isLoggedInUser);
-       if(data.data().uniqueid == isLoggedInUser.uid){
+      // console.log(isLoggedInUser);
+      if (data.data().uniqueid == isLoggedInUser.uid) {
         deleteoredittruefalse = `<div class="deleteoreditdiv">
                 <i class="fa-solid fa-ellipsis-vertical"></i>
                 <ul class="deleteoreditdropdown">
-                  <li>Edit</li>
-                  <li>Delete</li>
+                  <li onclick="openeditmodalfoo('${data.id}')">Edit</li>
+                  <li onclick="deletepostfoo('${data.id}')">Delete</li>
                 </ul>
               </div>`
       }
-      
+
       var profilePicSrc = againdata.profilepic ? againdata.profilepic : "https://firebasestorage.googleapis.com/v0/b/social-media-app-7593f.appspot.com/o/images%2Favatar.png?alt=media&token=eb081e88-6772-4d92-85a5-a623b4671927";
-      
+
       div.innerHTML = `
         <div class="firstdivofpost">
           <div class="imgarea">
@@ -315,3 +319,68 @@ async function displayPosts() {
     }
   });
 }
+
+
+async function deletepostfoo(postid) {
+  await deleteDoc(doc(db, "posts", postid));
+  displayPosts();
+};
+
+
+async function editpostfoo() {
+  const washingtonRef = doc(db, "posts", uidofedit);
+
+  var editpostInputBox = document.querySelector('#editpostInputBox');
+
+
+  await updateDoc(washingtonRef, {
+    content: editpostInputBox.value
+  });
+  removeeditmodalfoo();
+  displayPosts();
+};
+
+
+function openeditmodalfoo(uidofpost) {
+
+  uidofedit = uidofpost;
+  var userName = document.querySelector('.infonamemodalofeditdelete h2');
+  var userMobNum = document.querySelector('.infonamemodalofeditdelete p');
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const docRef = doc(db, "user", uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        var { iFirstName, iSurnameName } = docSnap.data();
+        userName.innerHTML = iFirstName + " " + iSurnameName
+
+      } else {
+        console.error("No such document!");
+      }
+    }
+  });
+
+  userMobNum.innerHTML = isLoggedInUser.email
+
+
+  modalbodyofedit.classList.remove('none');
+  body.classList.add('overflowhidden');
+}
+
+// bhai is se modal nikal jaiga in edit wala
+
+function removeeditmodalfoo() {
+  modalbodyofedit.classList.add('none');
+  body.classList.remove('overflowhidden');
+}
+
+
+// bhai function bulai hai in module
+
+window.deletepostfoo = deletepostfoo
+window.editpostfoo = editpostfoo
+window.openeditmodalfoo = openeditmodalfoo
+window.removeeditmodalfoo = removeeditmodalfoo

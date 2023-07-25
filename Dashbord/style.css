@@ -257,7 +257,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 2;
+  z-index: 20;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -267,8 +267,7 @@ body {
   position: absolute !important;
 }
 
-.modal,
-.twomodal {
+.modalofedit{
   padding: 10px;
   width: 40%;
   min-height: 30%;
@@ -276,6 +275,19 @@ body {
   background-color: white;
   border-radius: 10px;
   box-shadow: 1px 1px 10px 10px rgba(0, 0, 0, 20%);
+  z-index: 20;
+}
+
+.modal,
+.twomodal{
+  padding: 10px;
+  width: 40%;
+  min-height: 30%;
+  max-height: 60%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px 10px rgba(0, 0, 0, 20%);
+  z-index: 20;
 }
 
 .twomodal {
@@ -334,6 +346,21 @@ textarea.form-control {
   background-color: #00d0de;
 }
 
+.closebtnofedit{
+  background-color: #05B6C1;
+  border: 0px;
+  color: white;
+  border-radius: 8px;
+  float: right;
+  width: 60px;
+  height: 35px;
+  margin: 10px;
+}
+
+.closebtnofedit:hover{
+  background-color: #00d0de;
+}
+
 .no2pagalhaiyebutton {
   background-color: rgb(4, 80, 107);
   border: 0px;
@@ -346,6 +373,21 @@ textarea.form-control {
 }
 
 .no2pagalhaiyebutton:hover {
+  background-color: rgb(70, 165, 202);
+}
+
+.editbtn{
+  background-color: rgb(4, 80, 107);
+  border: 0px;
+  color: white;
+  border-radius: 8px;
+  float: right;
+  width: 60px;
+  height: 35px;
+  margin: 10px;
+}
+
+.editbtn:hover{
   background-color: rgb(70, 165, 202);
 }
 
@@ -621,6 +663,34 @@ textarea.form-control {
   border-radius: 8px;
   font-weight: bold;
 }
+
+.editdeleteofimg{
+  width: 60px;
+  height: 60px;
+  margin: 10px 20px;
+  border-radius: 10px;
+}
+
+.modalbodyofedit{
+  width: 100vw;
+  height:100vh;
+  background-color: rgba(0, 0, 0, 20%);
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.editdeleteoffirstline{
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #05B6C1;
+  margin-bottom: 20px;
+}
+
 
 @media (max-width:1088px) {
   .row {
