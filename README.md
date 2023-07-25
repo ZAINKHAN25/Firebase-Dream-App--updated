@@ -11,7 +11,7 @@ Welcome to the Firebase Dream App repository! This repository contains the sourc
 
 ## Live Demo
 
-To see the Firebase Dream App in action, visit the [live demo]([https://zainkhan25-firebase-dream-app.netlify.app/](https://social-media-app-7593f.web.app/)) and explore its features.
+To see the Firebase Dream App in action, visit the [live demo](https://social-media-app-7593f.web.app) and explore its features.
 
 ## Installation
 
@@ -44,6 +44,6 @@ If you have any questions or inquiries regarding the Firebase Dream App, please 
 
 - Name: ZAIN KHAN 25
 - Email: zainarfeen87@gmail.com
-- LinkedIn: [Your LinkedIn Profile URL]
+- LinkedIn: [https://www.linkedin.com/in/zain-khan-21992026a/]
 
 Thank you for your interest in the Firebase Dream App. We hope you enjoy exploring and utilizing this social media platform!
